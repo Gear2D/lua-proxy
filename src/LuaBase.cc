@@ -62,6 +62,7 @@ void LuaBase::handle(parameterbase::id pid, base* lastwrite, object::id owner) {
 }
 void LuaBase::setup(object::signature & si) {
 	parseComponentNames(si[LUA_COMPONENTS_SIGNATURE_KEY]);
+	compath = si["compath"];
 	std::list<std::string> notFound; //TODO list?
 	std::list<std::string>::iterator it;
 	for (it = names.begin(); it!=names.end(); it++){

@@ -64,6 +64,7 @@ class LuaBase : public gear2d::component::base {
 		lua_State *L;
 		std::list<std::string> names;
 		std::list<std::string> components;
+		std::string compath;
 		
 		static std::stack<LuaBase*> instances;
 
