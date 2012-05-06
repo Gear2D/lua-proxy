@@ -22,7 +22,7 @@ namespace
     const char* G2D_LUA_HANDLER_TABLE = "__g2d_handlers";
     const char* G2D_LUA_INTERFACE_TABLE = "__g2d_export";
     const char* THIS_AS_LIGHTUSERDATA = "__g2dproxy";
-    const char* LUA_COMPONENTS_SIGNATURE_KEY = "luattach";
+    const char* LUA_COMPONENTS_SIGNATURE_KEY = "proxy-lua.attach";
 	
 	/* TODO: redo. */
     const char* G2D_COMPONENT = 
