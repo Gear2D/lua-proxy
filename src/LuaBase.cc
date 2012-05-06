@@ -36,10 +36,10 @@ LuaBase::~LuaBase(){
 }
 
 component::type LuaBase::type() {
-	return "lua";
+	return "basic";
 }
 component::family LuaBase::family() { 
-	return "proxy";
+	return "proxy-lua";
 }
 
 //TODO actually read dependencies
