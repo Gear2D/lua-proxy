@@ -49,14 +49,20 @@ std::string LuaBase::depends() {
 
 void LuaBase::handle(parameterbase::id pid, base* lastwrite, object::id owner) {
 	std::list<std::string>::const_iterator it;
+	std::string family;
+	
 	for (it = names.begin(); it!=names.end(); it++){
-		if (it->length()){
-			lua_getfield(L, LUA_GLOBALSINDEX, it->substr(0,it->find("/")).c_str());
+		family = it->substr(0,it->find("/"));
+		if (family.length()){
+			if (!lua_checkstack(L,3)) std::cout<<"==LuaStackOverflow"<<std::endl;
+// 			std::cout<<"==LW: "<<lastwrite<<std::endl;
+// 			std::cout<<"Owner:"<<owner<<std::endl;
+			lua_getglobal(L, family.c_str());
 			lua_getfield(L, -1, G2D_LUA_HANDLER_TABLE);
 			lua_pushstring(L, pid.c_str());
 			lua_rawget(L, -2);
 			if (lua_isfunction(L, -1)) lua_pcall(L,0,0,0);
-			lua_pop(L,3);
+			lua_pop(L,2);
 		}
 	}
 }
@@ -156,9 +162,12 @@ int LuaBase::parseComponentNames(std::string depends){
  ************************/
 
 bool LuaBase::getField(const char* object, const char* method){
+	std::cout<<"Getting field "<<method<<" from "<<object<<std::endl;
 	bool foundObject = false;
+	std::string obj = object;
 	if (object) {
-		lua_getglobal(L, object);  /* the component */
+		if (!lua_checkstack(L,3)) std::cout<<"==LuaStackOverflow"<<std::endl;
+		lua_getglobal(L, obj.c_str());  /* the component */
 		if (lua_isnil(L, -1)){
 			lua_pop(L, 1);
 			std::cout<<"table \""<<object<<"\" not found"<<std::endl;
@@ -206,6 +215,7 @@ int LuaBase::callMethod(const char* object, const char* method, Container args){
 	}else{
 		std::cout<<"function "<<method<<" not found"<<std::endl;
 	}
+	lua_pop(L,1);
 }
 
 template <typename Container>
