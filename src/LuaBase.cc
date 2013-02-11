@@ -183,7 +183,7 @@ bool LuaBase::getField(const char* object, const char* method){
 }
 
 int LuaBase::callMethod(const char* object, const char* method){
-		callMethod(object,method,std::vector<LuaArg*>(0));
+		return callMethod(object,method,std::vector<LuaArg*>(0));
 }
 
 template <typename Container>
@@ -216,6 +216,7 @@ int LuaBase::callMethod(const char* object, const char* method, Container args){
 		std::cout<<"function "<<method<<" not found"<<std::endl;
 	}
 	lua_pop(L,1);
+  return 0;
 }
 
 template <typename Container>
@@ -403,6 +404,7 @@ int LuaBase::g2dlua_read(lua_State *L){
 
 int LuaBase::g2dlua_spawn(lua_State *L){
 	getInstance(L)->spawn(lua_tostring(L,-1));
+  return 0;
 }
 
 int LuaBase::g2dlua_registerFunction(lua_State *L){
@@ -428,6 +430,7 @@ int LuaBase::g2dlua_unregisterFunction(lua_State *L){
 		case 0:
 			break;
 	}
+  return 0;
 }
 
 void LuaBase::pushTypes(){
@@ -456,11 +459,7 @@ void LuaBase::registerStaticFunctions(){
 	lua_register(L,"g2d_unregisterFunction",g2dlua_unregisterFunction);
 }
 
-extern "C" {
-	gear2d::component::base * build() {
-		return new LuaBase();
-	}
-}
+g2dcomponent(LuaBase);
 
 #ifdef LUA_BASE_CC_MAIN
 int main(int argc, char **argv){
