@@ -7,8 +7,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 find_package(Gear2D REQUIRED)
 find_package(Lua51 REQUIRED)
 
-set(CMAKE_INSTALL_PREFIX ${Gear2D_COMPONENT_PREFIX})
-
 # add the Gear2D include directories and link directories.
 # they are calculated by FindGear2D.cmake
 include_directories(${Gear2D_INCLUDE_DIR} ${LUA_INCLUDE_DIR})
@@ -26,14 +24,14 @@ elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION")
 else()
   set(Gear2D_COMPONENT_VERSION "unknown")
 endif()
-set(CMAKE_INSTALL_PREFIX ${Gear2D_COMPONENT_PREFIX})
 
 file(GLOB compile_sources "src/*.cc")
 
-add_library(basic SHARED ${compile_sources})
+add_library(basic MODULE ${compile_sources})
 
+set(COMPONENT_ROOT "lib/gear2d/component")
 install(TARGETS basic
-				LIBRARY DESTINATION proxy-lua)
+				LIBRARY DESTINATION ${COMPONENT_ROOT}/proxy-lua)
 
 target_link_libraries(basic ${Gear2D_LIBRARY} ${LUA_LIBRARIES})
 
